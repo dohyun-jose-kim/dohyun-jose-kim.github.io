@@ -1,7 +1,7 @@
 {
-  "name": "blog-v0-2-5",
+  "name": "blog-v0-2-5-1",
   "private": true,
-  "version": "0.2.5",
+  "version": "0.2.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -79,7 +79,7 @@ const KO: Content = {
       title: '㈜인실리코젠 · 연구원',
       detailTitle: 'Food Domain AI & Data Analysis',
       points: [
-        'Python 기반 데이터 분석 — 국민건강영양조사 영양 데이터',
+        'Python 기반 데이터 분석 — 국민건강영양조사(KNHANES) 영양 데이터',
         'Graph DB · Vector DB 구축',
         'RAG 기반 LLM Chatbot',
         'Topic Modeling',
@@ -121,7 +121,7 @@ const KO: Content = {
       year: '2021.06 — 11',
       title: '경희대 지속가능에너지기술연구실 · 학부 인턴 (Prof. Lee)',
       detailTitle: '공학적 사고와 연구실에 대한 첫 경험',
-      points: ['리튬이온/메탈 이차전지 경험', '글러브박스(Glove Box) 첫 경험'],
+      points: ['리튬이온/메탈 이차전지 경험', '아르곤(Ar) 글러브박스 첫 경험'],
     },
     {
       year: '2020.03 — 2026.02',
@@ -164,7 +164,7 @@ const EN: Content = {
       title: 'INSILICOGEN · Junior Researcher',
       detailTitle: 'Food Domain AI & Data Analysis',
       points: [
-        'Python-based data analysis — national nutrition-survey data',
+        'Python-based data analysis — KNHANES (Korea National Health and Nutrition Examination Survey) data',
         'Built Graph DB · Vector DB',
         'RAG-based LLM chatbot',
         'Topic modeling',
@@ -206,7 +206,7 @@ const EN: Content = {
       year: '2021.06 — 11',
       title: 'Sustainable Energy Technology Lab, KHU · Undergrad Intern (Prof. Lee)',
       detailTitle: 'A first taste of lab research and engineering thinking',
-      points: ['Hands-on with lithium-ion & metal secondary batteries', 'First hands-on experience with a glove box'],
+      points: ['Hands-on with lithium-ion & metal secondary batteries', 'First hands-on experience with an argon (Ar) glove box'],
     },
     {
       year: '2020.03 — 2026.02',

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { CONTENT, LIFE_IDS, NAV, SOCIALS } from './content';
 import type { LifeId } from './content';
@@ -230,6 +230,10 @@ export default function App() {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const expWrapRef = useRef<HTMLDivElement | null>(null);
   const moveTick = useRef(false);
+  const headRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const bulletRefs = useRef<(HTMLUListElement | null)[]>([]);
+  const [headHeights, setHeadHeights] = useState<number[]>([]);
+  const [bulletHeights, setBulletHeights] = useState<number[]>([]);
 
   const C = CONTENT[lang];
 
@@ -249,6 +253,22 @@ export default function App() {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+
+  /* #20 — measure flying headings + bullet blocks so rows fit 2-line headings
+     and wrapped bullets (e.g. long official names) without clipping */
+  useLayoutEffect(() => {
+    if (expNarrow) return;
+    const measure = () => {
+      setHeadHeights(headRefs.current.map((el) => (el ? el.offsetHeight : 0)));
+      setBulletHeights(bulletRefs.current.map((el) => (el ? el.offsetHeight : 0)));
+    };
+    measure();
+    document.fonts?.ready.then(measure); // re-measure once web fonts settle (wrap may change)
+    let raf = 0;
+    const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure); };
+    window.addEventListener('resize', onResize);
+    return () => { window.removeEventListener('resize', onResize); cancelAnimationFrame(raf); };
+  }, [lang, expNarrow]);
 
   /* scroll-linked nav highlight */
   useEffect(() => {
@@ -408,7 +428,6 @@ export default function App() {
     ? detailLeft
     : `calc(${EXP.axisSummary}% - ${EXP.headLeftCollapsedGap + EXP.headW}px)`;
   const headTop = expExpanded ? EXP.headTopExpanded : EXP.headTopCollapsed;
-  const bulletsTop = expExpanded ? EXP.headTopExpanded + 30 : EXP.pad;
   const nodeTop = (expExpanded ? EXP.headTopExpanded : EXP.headTopCollapsed) + 6;
 
   const navLink = (n: { id: string; label: string }, onClick?: () => void) => {
@@ -567,7 +586,7 @@ export default function App() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n))}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-            2026 · v0.2.5
+            2026 · v0.2.5.1
             <br />
             VITE · REACT · TS
           </div>
@@ -663,7 +682,7 @@ export default function App() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n, () => setNavOpen(false)))}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-              2026 · v0.2.5
+              2026 · v0.2.5.1
               <br />
               VITE · REACT · TS
             </div>
@@ -749,11 +768,15 @@ export default function App() {
                 {C.experience.map((item, i) => {
                   const title = item.title.split(' · ').join('\n· ');
                   const titleSize = item.child ? Math.max(13, EXP.titleSize - 1.5) : EXP.titleSize;
+                  // #20 — bullets clear the (possibly 2-line) heading; row grows to fit wrapped content
+                  const headH = headHeights[i] || 21;
+                  const rowBulletsTop = expExpanded ? EXP.headTopExpanded + headH + 9 : EXP.pad;
+                  const rowHeight = Math.max(EXP.rowH, EXP.headTopExpanded + headH + 9 + (bulletHeights[i] || 0) + 16);
                   return (
                     <div
                       key={i}
                       onClick={toggleExp}
-                      style={{ position: 'relative', height: EXP.rowH, borderTop: item.child ? '1px solid transparent' : '1px solid var(--border)', cursor: 'pointer', overflow: 'hidden' }}
+                      style={{ position: 'relative', height: rowHeight, borderTop: item.child ? '1px solid transparent' : '1px solid var(--border)', cursor: 'pointer', overflow: 'hidden' }}
                     >
                       {/* RAIL */}
                       <div style={{ position: 'absolute', top: EXP.pad, left: 0, width: EXP.railW, boxSizing: 'border-box', paddingRight: 24, paddingLeft: item.child ? 26 : 0, transform: expExpanded ? 'translateX(0)' : `translateX(${EXP.railShift}px)`, transition: 'transform .6s cubic-bezier(.2,.7,.2,1)' }}>
@@ -763,7 +786,7 @@ export default function App() {
                       </div>
 
                       {/* FLYING HEADING */}
-                      <div style={{ position: 'absolute', width: EXP.headW, top: headTop, left: headLeft, textAlign: expExpanded ? 'left' : 'right', fontFamily: 'var(--font-display)', fontSize: 14, lineHeight: 1.45, color: 'var(--fg2)', transition: 'left .6s cubic-bezier(.2,.7,.2,1), top .6s cubic-bezier(.2,.7,.2,1)', willChange: 'left, top', pointerEvents: 'none' }}>{item.detailTitle}</div>
+                      <div ref={(el) => { headRefs.current[i] = el; }} style={{ position: 'absolute', width: EXP.headW, top: headTop, left: headLeft, textAlign: expExpanded ? 'left' : 'right', fontFamily: 'var(--font-display)', fontSize: 14, lineHeight: 1.45, color: 'var(--fg2)', transition: 'left .6s cubic-bezier(.2,.7,.2,1), top .6s cubic-bezier(.2,.7,.2,1)', willChange: 'left, top', pointerEvents: 'none' }}>{item.detailTitle}</div>
 
                       {/* AXIS + node */}
                       <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${axis}%`, width: 1, background: 'var(--border-strong)', transition: 'left .6s cubic-bezier(.2,.7,.2,1)' }}>
@@ -771,8 +794,8 @@ export default function App() {
                       </div>
 
                       {/* DETAIL bullets */}
-                      <div style={{ position: 'absolute', top: bulletsTop, left: detailLeft, right: 8, opacity: expExpanded ? 1 : 0, transform: expExpanded ? 'translateX(0)' : 'translateX(24px)', transition: 'opacity .45s ease, left .6s cubic-bezier(.2,.7,.2,1), transform .5s cubic-bezier(.2,.7,.2,1)', pointerEvents: expExpanded ? 'auto' : 'none' }}>
-                        <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <div style={{ position: 'absolute', top: rowBulletsTop, left: detailLeft, right: 8, opacity: expExpanded ? 1 : 0, transform: expExpanded ? 'translateX(0)' : 'translateX(24px)', transition: 'opacity .45s ease, left .6s cubic-bezier(.2,.7,.2,1), transform .5s cubic-bezier(.2,.7,.2,1)', pointerEvents: expExpanded ? 'auto' : 'none' }}>
+                        <ul ref={(el) => { bulletRefs.current[i] = el; }} style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                           {item.points.map((pt, j) => (
                             <li key={j} style={{ display: 'flex', gap: 10, alignItems: 'baseline', opacity: expExpanded ? 1 : 0, transform: expExpanded ? 'translateX(0)' : 'translateX(16px)', transition: 'opacity .4s ease, transform .5s cubic-bezier(.2,.7,.2,1)', transitionDelay: expExpanded ? `${(0.12 + i * 0.04 + j * 0.07).toFixed(2)}s` : '0s' }}>
                               <span style={{ flex: '0 0 auto', color: 'var(--accent)', fontSize: 9.9 }}>—</span>
