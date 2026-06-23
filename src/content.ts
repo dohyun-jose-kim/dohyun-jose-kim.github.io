@@ -1,5 +1,5 @@
 // ============================================================
-// CONTENT — all copy lives here, split by language. (v0.2.2 final)
+// CONTENT — all copy lives here, split by language. (v0.2.4)
 // Mirrors "Blog v0.2.2.dc.html".
 // ============================================================
 
@@ -63,7 +63,7 @@ export const SOCIALS = [
 const KO: Content = {
   identity: '자연을 좋아하고 도전을 즐깁니다.',
   heroName: '김도현',
-  heroSub: "L'Étranger who pushes the boundaries and tells stories.",
+  heroSub: "L'Étranger who pushes boundaries and tells stories.",
   heroHint: '',
   about: [
     '호기심을 아끼고 사랑합니다.',
@@ -89,7 +89,7 @@ const KO: Content = {
     {
       year: '2026.01 — 02',
       title: '인코인턴십 19기',
-      detailTitle: '한 줄 요약 — 작성 예정',
+      detailTitle: '산업 현장의 bioinformatics 입문',
       child: true,
       points: [
         'Linux·R·Python 컴퓨팅 기초',
@@ -100,41 +100,41 @@ const KO: Content = {
     {
       year: '2025.06 — 09',
       title: '서울대 진균생태계통학연구실 · 학부 인턴 (Prof. Lim)',
-      detailTitle: '한 줄 요약 — 작성 예정',
+      detailTitle: '곰팡이·세균 eDNA metabarcoding, bioinformatics·taxonomy 입문',
       points: [
         '한국 토양 eDNA(n=320) NGS 라이브러리 구축, ITS 바코딩·품질관리',
         'PacBio 메타바코딩 파이프라인(Linux/QIIME2), DADA2로 ASV 생성',
-        'Scikit-learn(Naive Bayes)+FunVIP 하이브리드로 종 수준 taxonomy 분류',
+        'scikit-learn(Naive Bayes)+FunVIP 하이브리드로 종 수준 taxonomy 분류',
       ],
     },
     {
       year: '2025.01 — 02',
       title: '서울대 바이오융합과학연구실 · 학부 인턴 (Prof. Lee)',
-      detailTitle: '한 줄 요약 — 작성 예정',
+      detailTitle: 'wet-lab 실험과 biophysics 입문',
       points: [
         '인지질 마이셀 제작·분석',
         '포유류 세포배양 (A375P, RAW 264.7)',
-        '마이크로드롭릿 기반 ROS 생성·정량',
+        'microdroplet 기반 ROS 생성·정량',
       ],
     },
     {
       year: '2021.06 — 11',
       title: '경희대 지속가능에너지기술연구실 · 학부 인턴 (Prof. Lee)',
-      detailTitle: '한 줄 요약 — 작성 예정',
-      points: ['리튬이온/메탈 이차전지 경험'],
+      detailTitle: '공학적 사고와 연구실에 대한 첫 경험',
+      points: ['리튬이온/메탈 이차전지 경험', '글러브박스(Glove Box) 첫 경험'],
     },
     {
       year: '2020.03 — 2026.02',
       title: '경희대학교 융합바이오신소재공학과 · 학사',
-      detailTitle: '한 줄 요약 — 작성 예정',
+      detailTitle: 'materials·agriculture·biopharma·bioinformatics를 아우른 biotech 학부',
       points: ['GPA 3.74 / 4.3 (4.02 / 4.5)'],
     },
   ],
   life: [
     { title: '러닝 · 철인삼종', micro: 'Running·Triathlon', desc: '', detail: '10K 38분 · 하프 1:34 · 풀마라톤 3:51 · 철인3종 2:52' },
-    { title: '드럼', micro: 'Drums', desc: '', detail: '락 장르의 드럼을 칩니다. 미국 메탈 밴드 Slipknot을 가장 좋아합니다.' },
-    { title: '글쓰기와 책읽기', micro: 'Words', desc: '', detail: '카뮈의 「이방인」을 가장 좋아합니다. 카뮈, 박준, 하루키, 카프카를 좋아합니다.' },
-    { title: '승마 · 요트 · 등산', micro: 'Equestrian·Sailing·Hiking', desc: '', detail: '마장마술 Dressage Level 5, 경기요트학교 초급 수료. 한라산 3:18 · 치악산 1:43 · 북한산 1:07' },
+    { title: '드럼', micro: 'Drums', desc: '', detail: '락 드럼을 칩니다. 미국 메탈 밴드 Slipknot을 가장 좋아합니다.' },
+    { title: '글쓰기와 책읽기', micro: 'Words', desc: '', detail: '카뮈의 「이방인」을 가장 좋아합니다. 카뮈, 박준, 하루키, 카프카의 글을 즐깁니다.' },
+    { title: '승마 · 요트 · 등산', micro: 'Equestrian·Sailing·Hiking', desc: '', detail: '마장마술(Dressage) Level 5, 경기요트학교 초급 수료. 한라산 3:18 · 치악산 1:43 · 북한산 1:07' },
     { title: '건축 · 예술 · 자연 · 사진', micro: 'Arch·Art·Nature·Photo', desc: '', detail: '건축과 예술 공간을 거닐고, 자연과 일상을 사진으로 담습니다.' },
     { title: '새로운 도전!', micro: 'TBD', desc: '', detail: '곧 새로운 취미로 채워집니다.' },
   ],
@@ -146,9 +146,9 @@ const KO: Content = {
 };
 
 const EN: Content = {
-  identity: 'loves nature, takes pleasure in challenges.',
+  identity: 'Loves nature, thrives on a challenge.',
   heroName: 'Dohyun Kim',
-  heroSub: "L'Étranger who pushes the boundaries and tells stories.",
+  heroSub: "L'Étranger who pushes boundaries and tells stories.",
   heroHint: '',
   about: [
     'I treasure small curiosities and\nlove the borders between disciplines.',
@@ -173,8 +173,8 @@ const EN: Content = {
     },
     {
       year: '2026.01 — 02',
-      title: 'Internship (19th)',
-      detailTitle: 'One-line summary — TBD',
+      title: 'Internship Program (19th)',
+      detailTitle: 'Introduction to bioinformatics in industry',
       child: true,
       points: [
         'Computing basics in Linux/R/Python',
@@ -185,7 +185,7 @@ const EN: Content = {
     {
       year: '2025.06 — 09',
       title: 'Mycology & Ecophylogeny Lab, SNU · Undergrad Intern (Prof. Lim)',
-      detailTitle: 'One-line summary — TBD',
+      detailTitle: 'Metabarcoding fungal & bacterial eDNA — into bioinformatics & taxonomy',
       points: [
         'Built NGS libraries from Korean soil eDNA (n=320); ITS barcoding and QC',
         'Ran a PacBio metabarcoding pipeline (Linux/QIIME2); generated ASVs with DADA2',
@@ -195,7 +195,7 @@ const EN: Content = {
     {
       year: '2025.01 — 02',
       title: 'Applied Bioscience & Engineering Lab, SNU · Undergrad Intern (Prof. Lee)',
-      detailTitle: 'One-line summary — TBD',
+      detailTitle: 'Introduction to wet-lab work and biophysics',
       points: [
         'Fabricated and analyzed phospholipid micelles',
         'Cultured mammalian cells (A375P, RAW 264.7)',
@@ -205,27 +205,27 @@ const EN: Content = {
     {
       year: '2021.06 — 11',
       title: 'Sustainable Energy Technology Lab, KHU · Undergrad Intern (Prof. Lee)',
-      detailTitle: 'One-line summary — TBD',
-      points: ['Lithium-ion / metal secondary battery experience'],
+      detailTitle: 'A first taste of lab research and engineering thinking',
+      points: ['Hands-on with lithium-ion & metal secondary batteries', 'First hands-on experience with a glove box'],
     },
     {
       year: '2020.03 — 2026.02',
       title: 'Kyung Hee University · BS, Convergent Biotech & Advanced Materials Science',
-      detailTitle: 'One-line summary — TBD',
+      detailTitle: 'A biotech degree spanning materials, agriculture, biopharma & bioinformatics',
       points: ['GPA 3.74 / 4.3 (4.02 / 4.5)'],
     },
   ],
   life: [
-    { title: 'Running & Triathlon', micro: '', desc: '', detail: '10K 38m · Half 1:34 · Full 3:51 · Triathlon 2:52' },
-    { title: 'Drums', micro: '', desc: '', detail: 'I play rock drums — my favorite is the American metal band Slipknot.' },
+    { title: 'Running & Triathlon', micro: '', desc: '', detail: '10K 0:38 · Half 1:34 · Full 3:51 · Triathlon 2:52' },
+    { title: 'Drums', micro: '', desc: '', detail: 'I play rock drums — my favorite band is the American metal act Slipknot.' },
     { title: 'Words', micro: '', desc: '', detail: "Albert Camus' L'Étranger is my favorite — I also love Park Joon, Haruki Murakami, and Franz Kafka." },
     { title: 'Equestrian · Sailing · Hiking', micro: '', desc: '', detail: 'Dressage Level 5; beginner sailing course. Hallasan 3:18 · Chiaksan 1:43 · Bukhansan 1:07' },
-    { title: 'Architecture, Art, Nature & Photography', micro: '', desc: '', detail: 'I wander spaces of architecture and art, and capture nature and everyday life in photographs.' },
+    { title: 'Architecture, Art, Nature & Photography', micro: '', desc: '', detail: 'I wander through spaces of architecture and art, and capture nature and everyday life in photographs.' },
     { title: 'More to come', micro: '', desc: '', detail: 'A slot for a hobby still to come.' },
   ],
   lifeDetailNote: '',
   contactHeadline: 'You are always welcome.',
-  contactInvite: 'The door is always open for a coffee.',
+  contactInvite: 'Research, ideas, or just a coffee — reach out anytime.',
   contactBullets: ['Light-roast pour-over', 'Espresso con panna', 'Caffè corretto'],
   contactNote: 'Based in South Korea',
 };

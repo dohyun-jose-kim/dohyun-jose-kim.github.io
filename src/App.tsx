@@ -216,7 +216,7 @@ const MONO_LABEL: CSSProperties = {
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>('dark');
-  const [lang, setLang] = useState<Lang>('ko');
+  const [lang, setLang] = useState<Lang>('en');
   const [hovered, setHovered] = useState<LifeId | null>(null);
   const [active, setActive] = useState('hero');
   const [flipped, setFlipped] = useState<LifeId | null>(null);
@@ -244,6 +244,11 @@ export default function App() {
       /* ignore */
     }
   }, []);
+
+  /* keep <html lang> in sync with language toggle (a11y / SEO) */
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   /* scroll-linked nav highlight */
   useEffect(() => {
@@ -559,13 +564,12 @@ export default function App() {
         >
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, letterSpacing: '.01em', color: 'var(--fg)' }}>{C.heroName}</div>
-            <div style={{ ...MONO_LABEL, fontSize: 9.5, letterSpacing: '.18em', color: 'var(--fg3)', marginTop: 6 }}>Personal · v0.2.3</div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n))}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-            PLACEHOLDER
+            2026 · v0.2.5
             <br />
-            BUILD 2026
+            VITE · REACT · TS
           </div>
         </nav>
       )}
@@ -656,13 +660,12 @@ export default function App() {
             </button>
             <div>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, letterSpacing: '.01em', color: 'var(--fg)' }}>{C.heroName}</div>
-              <div style={{ ...MONO_LABEL, fontSize: 9.5, letterSpacing: '.18em', color: 'var(--fg3)', marginTop: 6 }}>Personal · v0.2.3</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n, () => setNavOpen(false)))}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-              PLACEHOLDER
+              2026 · v0.2.5
               <br />
-              BUILD 2026
+              VITE · REACT · TS
             </div>
           </nav>
         </>
