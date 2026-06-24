@@ -15,7 +15,7 @@ const EXP = {
   detailWidth: 1060, // px — section max-width
   rowH: 184, // px — FIXED row height (no vertical jolt on toggle)
   railW: 340, // px — left box (year/title)
-  railShift: 60, // px — collapsed: nudge the title rail toward the axis
+  railShift: 16, // px — collapsed: nudge the title rail toward the axis (small, to keep clear of the detailTitle)
   pad: 30, // px — content top padding inside each row
   axisSummary: 72, // % — axis x when collapsed
   axisDetail: 40, // % — axis x when expanded (~32% horizontal travel)
@@ -29,8 +29,12 @@ const EXP = {
   headTopExpanded: 30, // px — expanded y (top of the bullet column)
 };
 
-const NARROW_EXP = 640; // px — below this the Experience switches to a stacked accordion
-const NARROW_NAV = 720; // px — below this the sidebar collapses into an overlay
+// Timeline is the PRIMARY view; the accordion is a fallback for genuinely narrow widths only (#26).
+const NARROW_EXP = 910; // px — Experience width below which it falls back to a stacked accordion
+const NARROW_NAV = 1320; // px — root width below which the sidebar collapses into an overlay.
+// Kept high so the sidebar always collapses BEFORE the accordion appears (#25), and so the
+// collapsed flying timeline stays overlap-free while the sidebar is still present.
+const CHIPS_3COL_MIN = 500; // px — Fields-of-interest chip area width needed for 3 columns (#23)
 
 const prefersReduced = () =>
   typeof window !== 'undefined' &&
@@ -221,6 +225,8 @@ export default function App() {
   const [active, setActive] = useState('hero');
   const [flipped, setFlipped] = useState<LifeId | null>(null);
   const [expExpanded, setExpExpanded] = useState(false);
+  const [expOpenIdx, setExpOpenIdx] = useState<number | null>(null); // #24: accordion (narrow) opens one at a time
+  const [chipsCols, setChipsCols] = useState(3); // #23: Fields-of-interest 3 → 2 columns
   const [lifeCols, setLifeCols] = useState(3);
   const [expNarrow, setExpNarrow] = useState(false);
   const [navNarrow, setNavNarrow] = useState(false);
@@ -229,6 +235,7 @@ export default function App() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
   const expWrapRef = useRef<HTMLDivElement | null>(null);
+  const chipsWrapRef = useRef<HTMLDivElement | null>(null);
   const moveTick = useRef(false);
   const headRefs = useRef<(HTMLDivElement | null)[]>([]);
   const bulletRefs = useRef<(HTMLUListElement | null)[]>([]);
@@ -304,13 +311,17 @@ export default function App() {
         const c = tpl.split(' ').filter((x) => x && x !== '0px').length;
         if (c) setLifeCols(c);
       }
-      if (expWrapRef.current) setExpNarrow(expWrapRef.current.clientWidth < NARROW_EXP);
       const root = rootRef.current;
-      if (root) {
-        const narrow = root.clientWidth < NARROW_NAV;
-        setNavNarrow(narrow);
-        if (!narrow) setNavOpen(false);
-      }
+      const navNarrowNow = root ? root.clientWidth < NARROW_NAV : false;
+      setNavNarrow(navNarrowNow);
+      if (!navNarrowNow) setNavOpen(false);
+      // #25/#26: Experience falls back to the accordion only AFTER the sidebar has collapsed,
+      // and only when it is then too narrow for the flying timeline.
+      const expW = expWrapRef.current?.clientWidth ?? 99999;
+      setExpNarrow(navNarrowNow && expW < NARROW_EXP);
+      // #23: Fields-of-interest chips — 3 columns when they fit, else 2 (never 4+2 / ragged).
+      const chipsW = chipsWrapRef.current?.clientWidth ?? 0;
+      if (chipsW) setChipsCols(chipsW >= CHIPS_3COL_MIN ? 3 : 2);
     };
     measure();
     window.addEventListener('resize', measure, { passive: true });
@@ -569,12 +580,12 @@ export default function App() {
             position: 'sticky',
             top: 0,
             zIndex: 1,
-            width: 200,
-            flex: '0 0 200px',
+            width: 168,
+            flex: '0 0 168px',
             alignSelf: 'flex-start',
             height: '100vh',
             boxSizing: 'border-box',
-            padding: '48px 28px',
+            padding: '48px 22px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -586,7 +597,7 @@ export default function App() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n))}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-            2026 · v0.2.5.1
+            2026 · v0.2.6
             <br />
             VITE · REACT · TS
           </div>
@@ -682,7 +693,7 @@ export default function App() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n, () => setNavOpen(false)))}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-              2026 · v0.2.5.1
+              2026 · v0.2.6
               <br />
               VITE · REACT · TS
             </div>
@@ -717,13 +728,10 @@ export default function App() {
             </div>
             <div style={{ marginTop: 44 }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--fg3)', marginBottom: 14 }}>{C.stackLabel}</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {[C.chipsRow1, C.chipsRow2].map((row, ri) => (
-                  <div key={ri} style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    {row.map((chip) => (
-                      <span key={chip} style={{ fontFamily: 'var(--font-mono)', fontSize: 10.8, color: 'var(--fg2)', padding: '6px 12px', border: '1px solid var(--border-strong)', borderRadius: 999 }}>{chip}</span>
-                    ))}
-                  </div>
+              {/* #23: single grid → 3 cols (3+3) when they fit, else 2 (2+2+2). Never ragged/4+2. */}
+              <div ref={chipsWrapRef} style={{ display: 'grid', gridTemplateColumns: `repeat(${chipsCols}, max-content)`, gap: 8, justifyContent: 'start' }}>
+                {[...C.chipsRow1, ...C.chipsRow2].map((chip) => (
+                  <span key={chip} style={{ fontFamily: 'var(--font-mono)', fontSize: 10.8, color: 'var(--fg2)', padding: '6px 12px', border: '1px solid var(--border-strong)', borderRadius: 999, whiteSpace: 'nowrap', textAlign: 'center' }}>{chip}</span>
                 ))}
               </div>
             </div>
@@ -735,6 +743,8 @@ export default function App() {
           <div ref={expWrapRef} style={{ width: '100%', maxWidth: EXP.detailWidth }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, marginBottom: 40 }}>
               <div style={{ ...MONO_LABEL, color: 'var(--fg2)' }}>— 03 / Experience</div>
+              {/* #24: master toggle only in the wide timeline; the narrow accordion opens rows one at a time */}
+              {!expNarrow && (
               <button
                 onClick={toggleExp}
                 aria-label="Toggle experience detail"
@@ -760,6 +770,7 @@ export default function App() {
               >
                 {expLabel} <span style={{ fontSize: 11.7 }}>{expIcon}</span>
               </button>
+              )}
             </div>
 
             {/* WIDE — absolute timeline */}
@@ -771,7 +782,8 @@ export default function App() {
                   // #20 — bullets clear the (possibly 2-line) heading; row grows to fit wrapped content
                   const headH = headHeights[i] || 21;
                   const rowBulletsTop = expExpanded ? EXP.headTopExpanded + headH + 9 : EXP.pad;
-                  const rowHeight = Math.max(EXP.rowH, EXP.headTopExpanded + headH + 9 + (bulletHeights[i] || 0) + 16);
+                  // grow only when expanded (collapsed stays compact + uniform → no large gaps)
+                  const rowHeight = expExpanded ? Math.max(EXP.rowH, EXP.headTopExpanded + headH + 9 + (bulletHeights[i] || 0) + 16) : EXP.rowH;
                   return (
                     <div
                       key={i}
@@ -817,14 +829,14 @@ export default function App() {
                   const title = item.title.split(' · ').join('\n· ');
                   const titleSize = item.child ? Math.max(13, EXP.titleSize - 1.5) : EXP.titleSize;
                   return (
-                    <div key={i} onClick={toggleExp} style={{ padding: `20px 0 20px ${item.child ? 26 : 0}px`, borderTop: item.child ? '1px solid transparent' : '1px solid var(--border)', cursor: 'pointer' }}>
+                    <div key={i} onClick={() => setExpOpenIdx((p) => (p === i ? null : i))} style={{ padding: `20px 0 20px ${item.child ? 26 : 0}px`, borderTop: item.child ? '1px solid transparent' : '1px solid var(--border)', cursor: 'pointer' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         {item.child && <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 1 }}>↳</span>}
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11.2, letterSpacing: '.04em', color: 'var(--accent)' }}>{item.year}</div>
                       </div>
                       <div style={{ fontFamily: 'var(--font-display)', fontSize: titleSize, fontWeight: 600, lineHeight: 1.25, color: 'var(--fg)', marginTop: 6, whiteSpace: 'pre-line' }}>{title}</div>
                       <div style={{ fontFamily: 'var(--font-display)', fontSize: 14, lineHeight: 1.45, color: 'var(--fg2)', marginTop: 8 }}>{item.detailTitle}</div>
-                      <div style={{ overflow: 'hidden', maxHeight: expExpanded ? 800 : 0, opacity: expExpanded ? 1 : 0, transition: 'max-height .55s cubic-bezier(.2,.7,.2,1), opacity .4s ease' }}>
+                      <div style={{ overflow: 'hidden', maxHeight: expOpenIdx === i ? 800 : 0, opacity: expOpenIdx === i ? 1 : 0, transition: 'max-height .55s cubic-bezier(.2,.7,.2,1), opacity .4s ease' }}>
                         <ul style={{ listStyle: 'none', margin: '12px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                           {item.points.map((pt, j) => (
                             <li key={j} style={{ display: 'flex', gap: 10, alignItems: 'baseline' }}>
@@ -840,10 +852,12 @@ export default function App() {
               </div>
             )}
 
-            <div onClick={toggleExp} style={{ marginTop: 36, display: 'inline-flex', alignItems: 'center', gap: 10, color: 'var(--fg3)', fontFamily: 'var(--font-mono)', fontSize: 9.9, letterSpacing: '.14em', cursor: 'pointer' }}>
-              <span style={{ display: 'block', width: 28, height: 1, background: 'linear-gradient(90deg, var(--fg3), transparent)' }} />
-              {expHint}
-            </div>
+            {!expNarrow && (
+              <div onClick={toggleExp} style={{ marginTop: 36, display: 'inline-flex', alignItems: 'center', gap: 10, color: 'var(--fg3)', fontFamily: 'var(--font-mono)', fontSize: 9.9, letterSpacing: '.14em', cursor: 'pointer' }}>
+                <span style={{ display: 'block', width: 28, height: 1, background: 'linear-gradient(90deg, var(--fg3), transparent)' }} />
+                {expHint}
+              </div>
+            )}
           </div>
         </section>
 
