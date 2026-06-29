@@ -597,7 +597,7 @@ export default function App() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n))}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-            2026 · v0.2.7
+            2026 · v0.2.8
             <br />
             VITE · REACT · TS
           </div>
@@ -693,7 +693,7 @@ export default function App() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n, () => setNavOpen(false)))}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-              2026 · v0.2.7
+              2026 · v0.2.8
               <br />
               VITE · REACT · TS
             </div>
@@ -897,33 +897,7 @@ export default function App() {
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
                 };
-                /* the last Life slot is the bright soft-orange "visit my sandbox!" invite → the sandbox playground */
-                if (id === 'tbd') {
-                  return (
-                    <a
-                      key={id}
-                      href="https://dohyun-jose-kim.github.io/sandbox/"
-                      onMouseEnter={() => setHovered(id)}
-                      onMouseLeave={() => setHovered(null)}
-                      aria-label="Visit my sandbox — web experiments playground"
-                      style={{
-                        position: 'relative', height: 200, borderRadius: 14, overflow: 'hidden',
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 9,
-                        textDecoration: 'none', cursor: 'pointer',
-                        background: 'linear-gradient(150deg, #ffd0a0 0%, #ffa869 52%, #ff9551 100%)',
-                        boxShadow: on
-                          ? '0 16px 38px rgba(255,142,74,.42), inset 0 0 0 1px rgba(255,255,255,.5)'
-                          : '0 9px 24px rgba(255,142,74,.24), inset 0 0 0 1px rgba(255,255,255,.32)',
-                        transform: on ? 'translateY(-4px)' : 'none',
-                        transition: 'transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s',
-                      }}
-                    >
-                      <span aria-hidden style={{ position: 'absolute', top: -34, right: -24, width: 130, height: 130, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,.6), rgba(255,255,255,0) 70%)', pointerEvents: 'none' }} />
-                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 20.5, color: '#5a2a10', letterSpacing: '.005em' }}>visit my sandbox!</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.2em', textTransform: 'uppercase', color: 'rgba(90,42,16,.66)' }}>web experiments&nbsp;↗</span>
-                    </a>
-                  );
-                }
+                const isSandbox = id === 'tbd'; // the last Life slot doubles as the "visit my sandbox!" invite
                 return (
                   <div
                     key={id}
@@ -931,11 +905,15 @@ export default function App() {
                     tabIndex={0}
                     onMouseEnter={() => setHovered(id)}
                     onMouseLeave={() => setHovered(null)}
-                    onClick={() => toggleFlip(id)}
+                    onClick={() => {
+                      if (isSandbox && flip) { window.location.href = 'https://dohyun-jose-kim.github.io/sandbox/'; }
+                      else { toggleFlip(id); }
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        toggleFlip(id);
+                        if (isSandbox && flip) { window.location.href = 'https://dohyun-jose-kim.github.io/sandbox/'; }
+                        else { toggleFlip(id); }
                       }
                     }}
                     style={{
@@ -962,21 +940,30 @@ export default function App() {
                           <div style={{ fontSize: 11.7, lineHeight: 1.6, color: 'var(--fg3)', marginTop: 10 }}>{c.desc}</div>
                         </div>
                       </div>
-                      {/* BACK — title top · photo slot middle · detail bottom */}
-                      <div style={{ ...faceBase, padding: 18, border: '1px solid var(--accent)', justifyContent: 'space-between', transform: 'rotateY(180deg)' }}>
-                        <div>
-                          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 4 }}>{c.micro}</div>
-                          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 13, lineHeight: 1.2, color: 'var(--fg)' }}>{c.title}</div>
+                      {/* BACK — sandbox card: bright soft-orange "visit my sandbox!" (click again → go); others: title · photo · detail */}
+                      {isSandbox ? (
+                        <div style={{ ...faceBase, padding: 16, border: '1px solid #ff9551', transform: 'rotateY(180deg)', background: 'linear-gradient(150deg, #ffd0a0 0%, #ffa869 52%, #ff9551 100%)', alignItems: 'center', justifyContent: 'center', gap: 7, overflow: 'hidden' }}>
+                          <span aria-hidden style={{ position: 'absolute', top: -28, right: -20, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,.6), rgba(255,255,255,0) 70%)', pointerEvents: 'none' }} />
+                          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 17, color: '#5a2a10', textAlign: 'center', lineHeight: 1.1 }}>visit my sandbox!</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.18em', textTransform: 'uppercase', color: 'rgba(90,42,16,.7)' }}>web experiments&nbsp;↗</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 6.5, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(90,42,16,.5)', marginTop: 3 }}>click again to enter</span>
                         </div>
-                        {/* photo placeholder — swap for a real <img> or drag-drop slot */}
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          style={{ height: 54, margin: '5px 0', borderRadius: 9, border: '1px dashed var(--border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)' }}
-                        >
-                          ＋ PHOTO
+                      ) : (
+                        <div style={{ ...faceBase, padding: 18, border: '1px solid var(--accent)', justifyContent: 'space-between', transform: 'rotateY(180deg)' }}>
+                          <div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 4 }}>{c.micro}</div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 13, lineHeight: 1.2, color: 'var(--fg)' }}>{c.title}</div>
+                          </div>
+                          {/* photo placeholder — swap for a real <img> or drag-drop slot */}
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ height: 54, margin: '5px 0', borderRadius: 9, border: '1px dashed var(--border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)' }}
+                          >
+                            ＋ PHOTO
+                          </div>
+                          <div style={{ fontSize: 9.5, lineHeight: 1.45, color: 'var(--fg2)' }}>{c.detail}</div>
                         </div>
-                        <div style={{ fontSize: 9.5, lineHeight: 1.45, color: 'var(--fg2)' }}>{c.detail}</div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 );
