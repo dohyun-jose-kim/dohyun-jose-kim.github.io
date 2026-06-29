@@ -597,7 +597,7 @@ export default function App() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n))}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-            2026 · v0.2.6
+            2026 · v0.2.7
             <br />
             VITE · REACT · TS
           </div>
@@ -693,7 +693,7 @@ export default function App() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>{NAV.map((n) => navLink(n, () => setNavOpen(false)))}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: 'var(--fg3)', lineHeight: 1.8, opacity: 0.7 }}>
-              2026 · v0.2.6
+              2026 · v0.2.7
               <br />
               VITE · REACT · TS
             </div>
@@ -897,6 +897,33 @@ export default function App() {
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
                 };
+                /* the last Life slot is the bright soft-orange "visit my sandbox!" invite → the sandbox playground */
+                if (id === 'tbd') {
+                  return (
+                    <a
+                      key={id}
+                      href="https://dohyun-jose-kim.github.io/sandbox/"
+                      onMouseEnter={() => setHovered(id)}
+                      onMouseLeave={() => setHovered(null)}
+                      aria-label="Visit my sandbox — web experiments playground"
+                      style={{
+                        position: 'relative', height: 200, borderRadius: 14, overflow: 'hidden',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 9,
+                        textDecoration: 'none', cursor: 'pointer',
+                        background: 'linear-gradient(150deg, #ffd0a0 0%, #ffa869 52%, #ff9551 100%)',
+                        boxShadow: on
+                          ? '0 16px 38px rgba(255,142,74,.42), inset 0 0 0 1px rgba(255,255,255,.5)'
+                          : '0 9px 24px rgba(255,142,74,.24), inset 0 0 0 1px rgba(255,255,255,.32)',
+                        transform: on ? 'translateY(-4px)' : 'none',
+                        transition: 'transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s',
+                      }}
+                    >
+                      <span aria-hidden style={{ position: 'absolute', top: -34, right: -24, width: 130, height: 130, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,.6), rgba(255,255,255,0) 70%)', pointerEvents: 'none' }} />
+                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 20.5, color: '#5a2a10', letterSpacing: '.005em' }}>visit my sandbox!</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.2em', textTransform: 'uppercase', color: 'rgba(90,42,16,.66)' }}>web experiments&nbsp;↗</span>
+                    </a>
+                  );
+                }
                 return (
                   <div
                     key={id}

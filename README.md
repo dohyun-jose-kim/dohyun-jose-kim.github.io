@@ -1,7 +1,5 @@
 # 김도현 · Personal blog — v0.2.3 (React + Vite + TypeScript)
 
-## Link to https://dohyun-jose-kim.github.io/
-
 A React port of the v0.2.3 prototype. Same as v0.1.5.1 (dark/light themes, cursor
 spotlight + clouds, KR/EN toggle, sticky TOC, 3D-flip Life cards, coffeehouse Contact)
 **except** the Experience section, which is now a **master-detail timeline**:
@@ -14,8 +12,6 @@ spotlight + clouds, KR/EN toggle, sticky TOC, 3D-flip Life cards, coffeehouse Co
   **staggered cascade** (and leave in reverse order). One toggle controls the whole
   section (it's view-everything, not per-row).
 - Experience and Life both carry a `CLICK TO EXPAND` hint, styled like the hero SCROLL hint.
-
-
 
 ## Run
 
