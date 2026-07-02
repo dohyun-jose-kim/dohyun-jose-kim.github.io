@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sitemap · Dohyun Kim</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="description" content="Sitemap — every page on dohyun-jose-kim.github.io" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+KR:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* same tokens as the main SPA (src/index.css) */
+      :root, [data-theme='dark'] {
+        --bg: #0a1626;
+        --fg: #e6edf7;
+        --fg2: rgba(200, 213, 233, 0.62);
+        --fg3: rgba(200, 213, 233, 0.34);
+        --border-strong: rgba(148, 170, 210, 0.3);
+        --accent: #64ffda;
+        --card-bg: rgba(148, 170, 210, 0.035);
+      }
+      [data-theme='light'] {
+        --bg: linear-gradient(180deg, #bfe0ff 0%, #e7f3ff 42%, #fbfdff 100%);
+        --fg: #16233b;
+        --fg2: rgba(30, 41, 59, 0.66);
+        --fg3: rgba(30, 41, 59, 0.42);
+        --border-strong: rgba(30, 58, 95, 0.34);
+        --accent: #6d28d9;
+        --card-bg: rgba(255, 255, 255, 0.55);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        justify-content: center;
+      }
+      main { width: min(680px, 92vw); padding: 96px 0 120px; }
+      .mono { font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.14em; }
+      .toggles { position: fixed; top: 22px; right: 22px; display: flex; gap: 10px; }
+      .toggles button {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-strong);
+        background: var(--card-bg);
+        color: var(--fg2);
+        cursor: pointer;
+      }
+      .kicker { font-size: 10px; color: var(--fg3); text-transform: uppercase; }
+      h1 { font-size: 34px; font-weight: 800; margin: 10px 0 6px; }
+      .sub { color: var(--fg2); font-size: 14px; line-height: 1.7; margin: 0 0 52px; }
+      .tree { list-style: none; margin: 0; padding: 0; }
+      .tree ul { list-style: none; margin: 0; padding-left: 26px; border-left: 1px solid var(--border-strong); }
+      .tree li { margin: 0 0 6px; }
+      .node {
+        display: flex; align-items: baseline; gap: 12px;
+        padding: 10px 12px; border-radius: 10px; text-decoration: none;
+      }
+      a.node:hover { background: var(--card-bg); }
+      a.node:hover .path { color: var(--accent); }
+      .path { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--fg); white-space: nowrap; }
+      .desc { font-size: 12.5px; color: var(--fg2); line-height: 1.5; }
+      .hash .path { font-size: 12px; color: var(--fg2); }
+      .foot { margin-top: 64px; font-size: 9px; color: var(--fg3); line-height: 1.8; }
+      .foot a { color: var(--fg3); text-decoration: none; border-bottom: 1px dotted var(--fg3); }
+    </style>
+  </head>
+  <body>
+    <div class="toggles">
+      <button id="t-theme" aria-label="Toggle theme">DARK</button>
+      <button id="t-lang" aria-label="Toggle language">EN</button>
+    </div>
+    <main>
+      <div class="kicker mono">INDEX OF EVERYTHING</div>
+      <h1 data-ko="사이트맵" data-en="Sitemap">Sitemap</h1>
+      <p class="sub" data-ko="이 도메인에서 공개 중인 모든 페이지." data-en="Every page currently live on this domain.">
+        Every page currently live on this domain.
+      </p>
+
+      <ul class="tree" id="tree"></ul>
+
+      <p class="foot mono">
+        DOHYUN-JOSE-KIM.GITHUB.IO
+        <br />
+        <a href="/" data-ko="← 홈으로" data-en="← back home">← back home</a>
+      </p>
+    </main>
+
+    <script>
+      // Pages are data, not markup — add a page = add a line here.
+      const PAGES = [
+        { path: '/', ko: '메인 — 소개·경력·일상·연락처 (원페이지)', en: 'Main — one-page intro, experience, life, contact', children: [
+          { path: '/#about', ko: '소개', en: 'About', hash: true },
+          { path: '/#exp', ko: '경력 — 마스터·디테일 타임라인', en: 'Experience — master-detail timeline', hash: true },
+          { path: '/#life', ko: '일상 — 플립 카드', en: 'Life — flip cards', hash: true },
+          { path: '/#contact', ko: '연락처', en: 'Contact', hash: true },
+        ]},
+        { path: '/sandbox/', ko: '실험장 허브 — 노을빛 모래밭', en: 'Sandbox — a sunset playground of experiments', children: [
+          { path: '/sandbox/wallpaper/', ko: '월페이퍼 — 애스트로노미', en: 'Wallpaper — astronomy' },
+        ]},
+        { path: '/sitemap/', ko: '사이트맵 — 이 페이지', en: 'Sitemap — this page' },
+      ];
+
+      const lang = { v: 'en' };
+      function nodeHtml(p) {
+        const a = document.createElement('a');
+        a.className = 'node';
+        a.href = p.path;
+        a.innerHTML = '<span class="path">' + p.path + '</span><span class="desc" data-ko="' + p.ko + '" data-en="' + p.en + '"></span>';
+        const li = document.createElement('li');
+        if (p.hash) li.className = 'hash';
+        li.appendChild(a);
+        if (p.children) {
+          const ul = document.createElement('ul');
+          p.children.forEach((c) => ul.appendChild(nodeHtml(c)));
+          li.appendChild(ul);
+        }
+        return li;
+      }
+      PAGES.forEach((p) => document.getElementById('tree').appendChild(nodeHtml(p)));
+
+      // theme + language — shared with the main SPA via the same localStorage keys
+      const root = document.documentElement;
+      const bTheme = document.getElementById('t-theme');
+      const bLang = document.getElementById('t-lang');
+      function applyTheme(t) {
+        root.setAttribute('data-theme', t);
+        bTheme.textContent = t.toUpperCase();
+      }
+      function applyLang(l) {
+        lang.v = l;
+        bLang.textContent = l.toUpperCase();
+        root.lang = l;
+        document.querySelectorAll('[data-ko]').forEach((el) => { el.textContent = el.getAttribute('data-' + l); });
+      }
+      let theme = 'dark', lng = 'en';
+      try {
+        theme = localStorage.getItem('blog-theme') || 'dark';
+        lng = localStorage.getItem('blog-lang') || 'en';
+      } catch (e) {}
+      applyTheme(theme); applyLang(lng);
+      bTheme.onclick = () => {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        applyTheme(theme);
+        try { localStorage.setItem('blog-theme', theme); } catch (e) {}
+      };
+      bLang.onclick = () => {
+        lng = lng === 'ko' ? 'en' : 'ko';
+        applyLang(lng);
+        try { localStorage.setItem('blog-lang', lng); } catch (e) {}
+      };
+    </script>
+  </body>
+</html>
